@@ -1118,3 +1118,934 @@
        }
    
    });
+
+/* =========================================================
+   5. COMMUNITY AWARENESS ACTIVITY
+========================================================= */
+
+const COMMUNITY_STORAGE_KEY = "passwordHygieneCommunityActivity";
+
+let communityRecords = loadCommunityRecords();
+
+let activeCommunityParticipantId = null;
+
+/* ---------------------------------------------------------
+ STORAGE
+--------------------------------------------------------- */
+
+function loadCommunityRecords() {
+  try {
+    const saved = localStorage.getItem(COMMUNITY_STORAGE_KEY);
+
+    if (!saved) {
+      return [];
+    }
+
+    const parsed = JSON.parse(saved);
+
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (error) {
+    console.error("Unable to load community activity data:", error);
+
+    return [];
+  }
+}
+
+function saveCommunityRecords() {
+  localStorage.setItem(COMMUNITY_STORAGE_KEY, JSON.stringify(communityRecords));
+}
+
+/* ---------------------------------------------------------
+ DOM ELEMENTS
+--------------------------------------------------------- */
+
+const communityRegistrationForm = document.getElementById(
+  "community-registration-form"
+);
+
+const participantNameInput = document.getElementById("participant-name");
+
+const participantTypeInput = document.getElementById("participant-type");
+
+const businessNameInput = document.getElementById("business-name");
+
+const communityRegistrationCard = document.getElementById(
+  "community-registration-card"
+);
+
+const communityActiveCard = document.getElementById("community-active-card");
+
+const activeParticipantTitle = document.getElementById(
+  "active-participant-title"
+);
+
+const activeParticipantDetails = document.getElementById(
+  "active-participant-details"
+);
+
+const activeParticipantId = document.getElementById("active-participant-id");
+
+const communityBeforeStage = document.getElementById("community-before-stage");
+
+const communityLearningStage = document.getElementById(
+  "community-learning-stage"
+);
+
+const communityAfterStage = document.getElementById("community-after-stage");
+
+const communityParticipantResult = document.getElementById(
+  "community-participant-result"
+);
+
+const newCommunityParticipant = document.getElementById(
+  "new-community-participant"
+);
+
+const saveBeforeAwareness = document.getElementById("save-before-awareness");
+
+const saveAfterAwareness = document.getElementById("save-after-awareness");
+
+/* ---------------------------------------------------------
+ FIND ACTIVE RECORD
+--------------------------------------------------------- */
+
+function getActiveCommunityRecord() {
+  if (!activeCommunityParticipantId) {
+    return null;
+  }
+
+  return (
+    communityRecords.find(
+      (record) => record.id === activeCommunityParticipantId
+    ) || null
+  );
+}
+
+/* ---------------------------------------------------------
+ PARTICIPANT ID
+--------------------------------------------------------- */
+
+function generateParticipantId() {
+  let highestNumber = 0;
+
+  communityRecords.forEach((record) => {
+    const match = String(record.id).match(/^P(\d+)$/);
+
+    if (match) {
+      highestNumber = Math.max(highestNumber, Number(match[1]));
+    }
+  });
+
+  return `P${String(highestNumber + 1).padStart(2, "0")}`;
+}
+
+/* ---------------------------------------------------------
+ REGISTRATION
+--------------------------------------------------------- */
+
+if (communityRegistrationForm) {
+  communityRegistrationForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const name = participantNameInput.value.trim();
+
+    const participantType = participantTypeInput.value;
+
+    const businessName = businessNameInput.value.trim();
+
+    if (!name) {
+      participantNameInput.focus();
+
+      return;
+    }
+
+    const newRecord = {
+      id: generateParticipantId(),
+
+      name: name,
+
+      participantType: participantType,
+
+      businessName: businessName,
+
+      registeredAt: new Date().toISOString(),
+
+      before: null,
+
+      after: null,
+
+      tools: {
+        password: false,
+
+        phishing: false,
+
+        dataRisk: false,
+
+        assessment: false,
+      },
+    };
+
+    communityRecords.push(newRecord);
+
+    saveCommunityRecords();
+
+    activeCommunityParticipantId = newRecord.id;
+
+    showActiveCommunityParticipant();
+
+    updateCommunityDashboard();
+  });
+}
+
+/* ---------------------------------------------------------
+ SHOW ACTIVE PARTICIPANT
+--------------------------------------------------------- */
+
+function showActiveCommunityParticipant() {
+  const record = getActiveCommunityRecord();
+
+  if (!record) {
+    return;
+  }
+
+  communityRegistrationCard.classList.add("community-hidden");
+
+  communityActiveCard.classList.remove("community-hidden");
+
+  activeParticipantTitle.textContent = `Participant ${record.id}`;
+
+  activeParticipantId.textContent = record.id;
+
+  let details = `${record.participantType}`;
+
+  if (record.businessName) {
+    details += ` • ${record.businessName}`;
+  }
+
+  activeParticipantDetails.textContent = details;
+
+  if (record.before === null) {
+    communityBeforeStage.classList.remove("community-hidden");
+
+    communityLearningStage.classList.add("community-hidden");
+
+    communityAfterStage.classList.add("community-hidden");
+
+    communityParticipantResult.classList.add("community-hidden");
+
+    newCommunityParticipant.classList.add("community-hidden");
+  } else if (record.after === null) {
+    communityBeforeStage.classList.add("community-hidden");
+
+    communityLearningStage.classList.remove("community-hidden");
+
+    communityAfterStage.classList.add("community-hidden");
+
+    communityParticipantResult.classList.add("community-hidden");
+
+    newCommunityParticipant.classList.add("community-hidden");
+
+    updateCommunityToolStatus();
+  } else {
+    showCompletedParticipant();
+  }
+}
+
+/* ---------------------------------------------------------
+ READ AWARENESS ANSWERS
+--------------------------------------------------------- */
+
+function getAwarenessScore(prefix) {
+  let score = 0;
+
+  const answers = [];
+
+  for (let i = 1; i <= 4; i++) {
+    const selected = document.querySelector(
+      `input[name="${prefix}-q${i}"]:checked`
+    );
+
+    if (!selected) {
+      return null;
+    }
+
+    const value = Number(selected.value);
+
+    answers.push(value);
+
+    score += value;
+  }
+
+  return {
+    score: score,
+
+    answers: answers,
+  };
+}
+
+/* ---------------------------------------------------------
+ SAVE BEFORE AWARENESS
+--------------------------------------------------------- */
+
+if (saveBeforeAwareness) {
+  saveBeforeAwareness.addEventListener("click", () => {
+    const result = getAwarenessScore("before");
+
+    if (!result) {
+      alert("Please answer all four questions before continuing.");
+
+      return;
+    }
+
+    const record = getActiveCommunityRecord();
+
+    if (!record) {
+      return;
+    }
+
+    record.before = result;
+
+    saveCommunityRecords();
+
+    communityBeforeStage.classList.add("community-hidden");
+
+    communityLearningStage.classList.remove("community-hidden");
+
+    updateCommunityToolStatus();
+
+    updateCommunityDashboard();
+  });
+}
+
+/* ---------------------------------------------------------
+ MARK WEBSITE MODULE AS USED
+--------------------------------------------------------- */
+
+function markCommunityToolComplete(toolName) {
+  const record = getActiveCommunityRecord();
+
+  if (!record) {
+    return;
+  }
+
+  if (record.before === null) {
+    return;
+  }
+
+  if (!Object.prototype.hasOwnProperty.call(record.tools, toolName)) {
+    return;
+  }
+
+  record.tools[toolName] = true;
+
+  saveCommunityRecords();
+
+  updateCommunityToolStatus();
+}
+
+/* ---------------------------------------------------------
+ CHECK WHETHER ALL MODULES WERE USED
+--------------------------------------------------------- */
+
+function allCommunityToolsCompleted() {
+  const record = getActiveCommunityRecord();
+
+  if (!record) {
+    return false;
+  }
+
+  return (
+    record.tools.password === true &&
+    record.tools.phishing === true &&
+    record.tools.dataRisk === true &&
+    record.tools.assessment === true
+  );
+}
+
+/* ---------------------------------------------------------
+ TOOL STATUS DISPLAY
+--------------------------------------------------------- */
+
+function updateCommunityToolStatus() {
+  const record = getActiveCommunityRecord();
+
+  if (!record) {
+    return;
+  }
+
+  const toolMap = {
+    password: document.getElementById("community-tool-password-status"),
+
+    phishing: document.getElementById("community-tool-phishing-status"),
+
+    dataRisk: document.getElementById("community-tool-data-status"),
+
+    assessment: document.getElementById("community-tool-assessment-status"),
+  };
+
+  const buttonMap = {
+    password: document.querySelector(
+      '.community-module-button[href="#password"]'
+    ),
+
+    phishing: document.querySelector(
+      '.community-module-button[href="#phishing"]'
+    ),
+
+    dataRisk: document.querySelector(
+      '.community-module-button[href="#data-risk"]'
+    ),
+
+    assessment: document.querySelector(
+      '.community-module-button[href="#assessment"]'
+    ),
+  };
+
+  Object.keys(toolMap).forEach((toolName) => {
+    const completed = record.tools[toolName];
+
+    if (toolMap[toolName]) {
+      toolMap[toolName].textContent = completed
+        ? "✓ Completed"
+        : "Not completed";
+    }
+
+    if (buttonMap[toolName]) {
+      buttonMap[toolName].classList.toggle("completed", completed);
+    }
+  });
+
+  const completionMessage = document.getElementById(
+    "community-completion-message"
+  );
+
+  if (allCommunityToolsCompleted()) {
+    completionMessage.classList.add("complete");
+
+    completionMessage.textContent =
+      "✓ All four website modules have been completed. The final awareness check is now available.";
+
+    communityAfterStage.classList.remove("community-hidden");
+  } else {
+    completionMessage.classList.remove("complete");
+
+    completionMessage.textContent =
+      "Use all four modules above to continue to the final awareness check.";
+
+    communityAfterStage.classList.add("community-hidden");
+  }
+}
+
+/* ---------------------------------------------------------
+ SAVE AFTER AWARENESS
+--------------------------------------------------------- */
+
+if (saveAfterAwareness) {
+  saveAfterAwareness.addEventListener("click", () => {
+    const record = getActiveCommunityRecord();
+
+    if (!record) {
+      return;
+    }
+
+    if (!allCommunityToolsCompleted()) {
+      alert("Please complete all four website modules first.");
+
+      return;
+    }
+
+    const result = getAwarenessScore("after");
+
+    if (!result) {
+      alert("Please answer all four questions before completing the activity.");
+
+      return;
+    }
+
+    record.after = result;
+
+    saveCommunityRecords();
+
+    showCompletedParticipant();
+
+    updateCommunityDashboard();
+  });
+}
+
+/* ---------------------------------------------------------
+ COMPLETED PARTICIPANT RESULT
+--------------------------------------------------------- */
+
+function showCompletedParticipant() {
+  const record = getActiveCommunityRecord();
+
+  if (!record || !record.after) {
+    return;
+  }
+
+  communityBeforeStage.classList.add("community-hidden");
+
+  communityLearningStage.classList.add("community-hidden");
+
+  communityAfterStage.classList.add("community-hidden");
+
+  communityParticipantResult.classList.remove("community-hidden");
+
+  newCommunityParticipant.classList.remove("community-hidden");
+
+  const beforeScore = record.before.score;
+
+  const afterScore = record.after.score;
+
+  const change = afterScore - beforeScore;
+
+  let changeText = "No change";
+
+  if (change > 0) {
+    changeText = `Awareness score increased by ${change} point${
+      change === 1 ? "" : "s"
+    }.`;
+  } else if (change < 0) {
+    changeText = `Awareness score changed by ${change} point${
+      change === -1 ? "" : "s"
+    }.`;
+  }
+
+  communityParticipantResult.innerHTML = `
+
+  <h4>✓ Awareness Activity Completed</h4>
+
+  <p>
+    <strong>Participant:</strong>
+    ${escapeCommunityHTML(record.id)}
+  </p>
+
+  <p>
+    <strong>Before score:</strong>
+    ${beforeScore}/8
+  </p>
+
+  <p>
+    <strong>After score:</strong>
+    ${afterScore}/8
+  </p>
+
+  <p>
+    <strong>${changeText}</strong>
+  </p>
+
+  <p>
+    The result is based on the participant's actual responses.
+    It is recorded for the project's community-awareness analysis.
+  </p>
+
+`;
+}
+
+/* ---------------------------------------------------------
+ REGISTER ANOTHER PARTICIPANT
+--------------------------------------------------------- */
+
+if (newCommunityParticipant) {
+  newCommunityParticipant.addEventListener("click", () => {
+    activeCommunityParticipantId = null;
+
+    communityActiveCard.classList.add("community-hidden");
+
+    communityRegistrationCard.classList.remove("community-hidden");
+
+    communityRegistrationForm.reset();
+
+    window.location.hash = "community-awareness";
+  });
+}
+
+/* ---------------------------------------------------------
+ DETECT ACTUAL USE OF EXISTING WEBSITE MODULES
+--------------------------------------------------------- */
+
+/* PASSWORD ANALYZER */
+
+if (passwordInput) {
+  passwordInput.addEventListener("input", () => {
+    if (passwordInput.value.length > 0) {
+      markCommunityToolComplete("password");
+    }
+  });
+}
+
+/* PHISHING ANALYZER */
+
+if (analyzePhishing) {
+  analyzePhishing.addEventListener("click", () => {
+    if (phishingMessage && phishingMessage.value.trim().length > 0) {
+      markCommunityToolComplete("phishing");
+    }
+  });
+}
+
+/* DATA RISK CHECKER */
+
+if (checkDataRisk) {
+  checkDataRisk.addEventListener("click", () => {
+    markCommunityToolComplete("dataRisk");
+  });
+}
+
+/* DIGITAL SECURITY ASSESSMENT */
+
+const communityAssessmentButton = document.getElementById(
+  "calculate-assessment"
+);
+
+if (communityAssessmentButton) {
+  communityAssessmentButton.addEventListener("click", () => {
+    markCommunityToolComplete("assessment");
+  });
+}
+
+/* ---------------------------------------------------------
+ DASHBOARD
+--------------------------------------------------------- */
+
+function updateCommunityDashboard() {
+  const participantsElement = document.getElementById("dashboard-participants");
+
+  const completedElement = document.getElementById("dashboard-completed");
+
+  const improvedElement = document.getElementById("dashboard-improved");
+
+  const completedRecords = communityRecords.filter(
+    (record) => record.before && record.after
+  );
+
+  const improvedRecords = completedRecords.filter(
+    (record) => record.after.score > record.before.score
+  );
+
+  participantsElement.textContent = communityRecords.length;
+
+  completedElement.textContent = completedRecords.length;
+
+  improvedElement.textContent = improvedRecords.length;
+
+  updateCommunityChart(completedRecords);
+
+  updateCommunityParticipantTable(completedRecords);
+}
+
+/* ---------------------------------------------------------
+ DASHBOARD CHART
+--------------------------------------------------------- */
+
+function updateCommunityChart(records) {
+  const categories = [
+    {
+      before: "chart-password-before",
+
+      after: "chart-password-after",
+
+      index: 0,
+    },
+
+    {
+      before: "chart-phishing-before",
+
+      after: "chart-phishing-after",
+
+      index: 1,
+    },
+
+    {
+      before: "chart-2fa-before",
+
+      after: "chart-2fa-after",
+
+      index: 2,
+    },
+
+    {
+      before: "chart-data-before",
+
+      after: "chart-data-after",
+
+      index: 3,
+    },
+  ];
+
+  categories.forEach((category) => {
+    let beforeCount = 0;
+
+    let afterCount = 0;
+
+    records.forEach((record) => {
+      if (record.before.answers[category.index] === 2) {
+        beforeCount++;
+      }
+
+      if (record.after.answers[category.index] === 2) {
+        afterCount++;
+      }
+    });
+
+    const total = records.length;
+
+    const beforePercentage = total > 0 ? (beforeCount / total) * 100 : 0;
+
+    const afterPercentage = total > 0 ? (afterCount / total) * 100 : 0;
+
+    const beforeElement = document.getElementById(category.before);
+
+    const afterElement = document.getElementById(category.after);
+
+    if (beforeElement) {
+      beforeElement.style.width = `${beforePercentage}%`;
+
+      beforeElement.title = `${beforeCount}/${total}`;
+    }
+
+    if (afterElement) {
+      afterElement.style.width = `${afterPercentage}%`;
+
+      afterElement.title = `${afterCount}/${total}`;
+    }
+  });
+}
+
+/* ---------------------------------------------------------
+ PARTICIPANT TABLE
+--------------------------------------------------------- */
+
+function updateCommunityParticipantTable(records) {
+  const tableBody = document.getElementById("community-participant-table");
+
+  if (!tableBody) {
+    return;
+  }
+
+  if (records.length === 0) {
+    tableBody.innerHTML = `
+
+    <tr>
+      <td
+        colspan="6"
+        class="empty-table-message"
+      >
+        No completed participants yet.
+      </td>
+    </tr>
+
+  `;
+
+    return;
+  }
+
+  tableBody.innerHTML = records
+    .map((record) => {
+      const change = record.after.score - record.before.score;
+
+      let changeText = "No change";
+
+      let changeClass = "change-neutral";
+
+      if (change > 0) {
+        changeText = `+${change}`;
+
+        changeClass = "change-positive";
+      } else if (change < 0) {
+        changeText = `${change}`;
+      }
+
+      return `
+
+          <tr>
+
+            <td>
+              ${escapeCommunityHTML(record.id)}
+            </td>
+
+            <td>
+              ${escapeCommunityHTML(record.participantType)}
+            </td>
+
+            <td>
+              ✓ Completed
+            </td>
+
+            <td>
+              ${record.before.score}/8
+            </td>
+
+            <td>
+              ${record.after.score}/8
+            </td>
+
+            <td
+              class="${changeClass}"
+            >
+              ${changeText}
+            </td>
+
+          </tr>
+
+        `;
+    })
+    .join("");
+}
+
+/* ---------------------------------------------------------
+ CSV EXPORT
+--------------------------------------------------------- */
+
+const exportCommunityData = document.getElementById("export-community-data");
+
+if (exportCommunityData) {
+  exportCommunityData.addEventListener("click", () => {
+    if (communityRecords.length === 0) {
+      alert("There is no community activity data to export yet.");
+
+      return;
+    }
+
+    const header = [
+      "Participant ID",
+
+      "Participant Type",
+
+      "Business Name",
+
+      "Before Score",
+
+      "After Score",
+
+      "Change",
+
+      "Password Analyzer",
+
+      "Phishing Analyzer",
+
+      "Data Risk Checker",
+
+      "Security Assessment",
+    ];
+
+    const rows = communityRecords.map((record) => {
+      const beforeScore = record.before ? record.before.score : "";
+
+      const afterScore = record.after ? record.after.score : "";
+
+      const change =
+        record.before && record.after ? afterScore - beforeScore : "";
+
+      return [
+        record.id,
+
+        record.participantType,
+
+        record.businessName,
+
+        beforeScore,
+
+        afterScore,
+
+        change,
+
+        record.tools.password ? "Completed" : "Not completed",
+
+        record.tools.phishing ? "Completed" : "Not completed",
+
+        record.tools.dataRisk ? "Completed" : "Not completed",
+
+        record.tools.assessment ? "Completed" : "Not completed",
+      ]
+        .map(csvEscape)
+        .join(",");
+    });
+
+    const csv = [header.map(csvEscape).join(","), ...rows].join("\n");
+
+    const blob = new Blob([csv], {
+      type: "text/csv;charset=utf-8;",
+    });
+
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+
+    link.href = url;
+
+    link.download = "community-awareness-activity.csv";
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
+  });
+}
+
+/* ---------------------------------------------------------
+ CSV HELPERS
+--------------------------------------------------------- */
+
+function csvEscape(value) {
+  const text = String(value ?? "");
+
+  return `"${text.replace(/"/g, '""')}"`;
+}
+
+function escapeCommunityHTML(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+/* ---------------------------------------------------------
+ CLEAR DATA
+--------------------------------------------------------- */
+
+const clearCommunityData = document.getElementById("clear-community-data");
+
+if (clearCommunityData) {
+  clearCommunityData.addEventListener("click", () => {
+    if (communityRecords.length === 0) {
+      alert("There is no community activity data to clear.");
+
+      return;
+    }
+
+    const confirmed = confirm(
+      "This will permanently remove all locally stored community activity records from this browser. Continue?"
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    communityRecords = [];
+
+    activeCommunityParticipantId = null;
+
+    saveCommunityRecords();
+
+    updateCommunityDashboard();
+
+    communityActiveCard.classList.add("community-hidden");
+
+    communityRegistrationCard.classList.remove("community-hidden");
+
+    communityRegistrationForm.reset();
+  });
+}
+
+/* ---------------------------------------------------------
+ INITIAL DASHBOARD LOAD
+--------------------------------------------------------- */
+
+updateCommunityDashboard();
+
