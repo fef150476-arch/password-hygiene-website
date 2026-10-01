@@ -664,8 +664,8 @@
       </section>
 
       <!-- =================================================
-     COMMUNITY AWARENESS ACTIVITY
-================================================== -->
+         COMMUNITY AWARENESS ACTIVITY
+    ================================================== -->
 
       <section
         id="community-awareness"
@@ -674,572 +674,414 @@
         <div class="container">
           <div class="section-heading">
             <div>
-              <span class="module-label"> COMMUNITY ENGAGEMENT </span>
+              <span class="eyebrow"> COMMUNITY ENGAGEMENT </span>
+
               <h2>Community Awareness Activity</h2>
             </div>
 
             <p>
-              Registration and before-and-after awareness activity for community
-              participants using the website's digital-security modules.
-            </p>
-          </div>
-
-          <!-- PRIVACY / ACTIVITY INFORMATION -->
-
-          <div class="community-info-box">
-            <strong>Community Activity</strong>
-
-            <p>
-              This activity records participation in the Community Engagement
-              Project and measures awareness before and after using the
-              website's educational modules.
-            </p>
-
-            <p>
-              No password, OTP, UPI PIN, bank information, Aadhaar number or
-              other confidential information is collected.
+              Register a participant and complete the digital-security awareness
+              activity using the website's interactive modules.
             </p>
           </div>
 
           <!-- REGISTRATION -->
 
-          <div id="community-registration-card" class="community-card">
-            <div class="community-card-heading">
-              <div>
-                <span class="module-label"> STEP 01 </span>
-                <h3>Participant Registration</h3>
-              </div>
+          <div class="tool-card community-registration-card">
+            <span class="module-label"> PARTICIPANT REGISTRATION </span>
 
-              <span class="community-status-badge">Registration</span>
-            </div>
+            <h3>Community Awareness Registration</h3>
 
-            <p class="community-description">
-              Register the participant before beginning the awareness activity.
-              Participant names are stored only on this device and are not
-              displayed in the public activity dashboard.
+            <p>
+              This section records participation in the community awareness
+              activity conducted as part of the Community Engagement Project.
             </p>
 
-            <form id="community-registration-form">
-              <div class="community-form-grid">
-                <div class="form-group">
-                  <label for="participant-name"> Participant Name * </label>
-
-                  <input
-                    type="text"
-                    id="participant-name"
-                    placeholder="Enter participant name"
-                    maxlength="80"
-                    required
-                  />
-                </div>
-
-                <div class="form-group">
-                  <label for="participant-type"> Participant Type * </label>
-
-                  <select id="participant-type" required>
-                    <option value="Shopkeeper">Shopkeeper</option>
-                    <option value="Community Member">Community Member</option>
-                    <option value="Worker">Worker</option>
-                    <option value="Student">Student</option>
-                    <option value="Other">Other</option>
-                  </select>
-                </div>
-
-                <div class="form-group">
-                  <label for="business-name">
-                    Shop / Business Name
-                    <span class="optional-label">(optional)</span>
-                  </label>
-
-                  <input
-                    type="text"
-                    id="business-name"
-                    placeholder="Optional"
-                    maxlength="100"
-                  />
-                </div>
-              </div>
-
-              <div class="community-privacy-note">
-                🔒 Phone number and email address are not required.
-              </div>
-
-              <button type="submit" class="btn btn-primary">
-                Register Participant
-              </button>
-            </form>
-          </div>
-
-          <!-- ACTIVE PARTICIPANT -->
-
-          <div
-            id="community-active-card"
-            class="community-card community-hidden"
-          >
-            <div class="community-active-header">
-              <div>
-                <span class="module-label"> ACTIVE PARTICIPANT </span>
-
-                <h3 id="active-participant-title">Participant P01</h3>
-
-                <p id="active-participant-details"></p>
-              </div>
-
-              <div class="participant-id-box">
-                <span>Participant ID</span>
-                <strong id="active-participant-id">P01</strong>
-              </div>
+            <div class="privacy-warning">
+              <strong>🔒 Privacy:</strong>
+              Do not enter passwords, OTPs, UPI PINs, bank details, Aadhaar
+              numbers or other confidential information.
             </div>
 
-            <!-- BEFORE QUESTIONS -->
+            <div class="community-form-grid">
+              <div class="form-group">
+                <label for="participant-name">
+                  Participant Name <span class="required">*</span>
+                </label>
 
-            <div id="community-before-stage">
-              <div class="community-step-title">
-                <span class="step-number">02</span>
-
-                <div>
-                  <h3>Before Awareness Check</h3>
-
-                  <p>
-                    Answer these questions based on the participant's knowledge
-                    before using the website modules.
-                  </p>
-                </div>
+                <input
+                  type="text"
+                  id="participant-name"
+                  placeholder="Enter participant name"
+                  required
+                />
               </div>
 
-              <div class="awareness-question">
-                <h4>
-                  1. How confident are you about creating a strong password?
-                </h4>
-
-                <label>
-                  <input type="radio" name="before-q1" value="2" />
-                  Very confident
+              <div class="form-group">
+                <label for="participant-type">
+                  Participant Type <span class="required">*</span>
                 </label>
 
-                <label>
-                  <input type="radio" name="before-q1" value="1" />
-                  Somewhat confident
-                </label>
-
-                <label>
-                  <input type="radio" name="before-q1" value="0" />
-                  Not confident
-                </label>
+                <select id="participant-type" required>
+                  <option value="">Select participant type</option>
+                  <option value="Shopkeeper">Shopkeeper</option>
+                  <option value="Worker">Worker</option>
+                  <option value="Community Member">Community Member</option>
+                  <option value="Other">Other</option>
+                </select>
               </div>
 
-              <div class="awareness-question">
-                <h4>2. Do you know how to identify a phishing message?</h4>
+              <div class="form-group">
+                <label for="business-name"> Shop / Business Name </label>
 
-                <label>
-                  <input type="radio" name="before-q2" value="2" />
-                  Yes
-                </label>
-
-                <label>
-                  <input type="radio" name="before-q2" value="1" />
-                  Somewhat
-                </label>
-
-                <label>
-                  <input type="radio" name="before-q2" value="0" />
-                  No
-                </label>
+                <input type="text" id="business-name" placeholder="Optional" />
               </div>
 
-              <div class="awareness-question">
-                <h4>3. Do you use two-factor authentication?</h4>
-
-                <label>
-                  <input type="radio" name="before-q3" value="2" />
-                  Yes / I know how to use it
+              <div class="form-group">
+                <label for="participant-email">
+                  Email Address <span class="required">*</span>
                 </label>
 
-                <label>
-                  <input type="radio" name="before-q3" value="1" />
-                  On some accounts / I know about it
-                </label>
-
-                <label>
-                  <input type="radio" name="before-q3" value="0" />
-                  No / I do not know about it
-                </label>
+                <input
+                  type="email"
+                  id="participant-email"
+                  placeholder="Enter email address"
+                  required
+                />
               </div>
 
-              <div class="awareness-question">
-                <h4>
-                  4. Do you know which personal information should not be shared
-                  unnecessarily?
-                </h4>
+              <div class="form-group">
+                <label for="participant-phone"> Phone Number </label>
 
-                <label>
-                  <input type="radio" name="before-q4" value="2" />
-                  Yes, clearly
-                </label>
-
-                <label>
-                  <input type="radio" name="before-q4" value="1" />
-                  Somewhat
-                </label>
-
-                <label>
-                  <input type="radio" name="before-q4" value="0" />
-                  No
-                </label>
-              </div>
-
-              <button
-                type="button"
-                id="save-before-awareness"
-                class="btn btn-primary"
-              >
-                Save Before-Awareness Responses
-              </button>
-            </div>
-
-            <!-- WEBSITE ACTIVITY -->
-
-            <div id="community-learning-stage" class="community-hidden">
-              <div class="community-step-title">
-                <span class="step-number">03</span>
-
-                <div>
-                  <h3>Website Awareness Activity</h3>
-
-                  <p>
-                    Ask the participant to use the four existing website
-                    modules. The system records only whether each module was
-                    used.
-                  </p>
-                </div>
-              </div>
-
-              <div class="community-module-grid">
-                <a href="#password" class="community-module-button">
-                  <span>🔐</span>
-                  <strong>Password Analyzer</strong>
-                  <small id="community-tool-password-status">
-                    Not completed
-                  </small>
-                </a>
-
-                <a href="#phishing" class="community-module-button">
-                  <span>🎣</span>
-                  <strong>Phishing Analyzer</strong>
-                  <small id="community-tool-phishing-status">
-                    Not completed
-                  </small>
-                </a>
-
-                <a href="#data-risk" class="community-module-button">
-                  <span>🛡️</span>
-                  <strong>Data Risk Checker</strong>
-                  <small id="community-tool-data-status"> Not completed </small>
-                </a>
-
-                <a href="#assessment" class="community-module-button">
-                  <span>📊</span>
-                  <strong>Security Assessment</strong>
-                  <small id="community-tool-assessment-status">
-                    Not completed
-                  </small>
-                </a>
-              </div>
-
-              <div
-                id="community-completion-message"
-                class="community-completion-message"
-              >
-                Use all four modules above to continue to the final awareness
-                check.
+                <input
+                  type="tel"
+                  id="participant-phone"
+                  placeholder="Optional"
+                />
               </div>
             </div>
-
-            <!-- AFTER QUESTIONS -->
-
-            <div id="community-after-stage" class="community-hidden">
-              <div class="community-step-title">
-                <span class="step-number">04</span>
-
-                <div>
-                  <h3>After Awareness Check</h3>
-
-                  <p>
-                    Ask the same awareness questions again after the participant
-                    has completed the website activity.
-                  </p>
-                </div>
-              </div>
-
-              <div class="awareness-question">
-                <h4>
-                  1. How confident are you about creating a strong password?
-                </h4>
-
-                <label>
-                  <input type="radio" name="after-q1" value="2" />
-                  Very confident
-                </label>
-
-                <label>
-                  <input type="radio" name="after-q1" value="1" />
-                  Somewhat confident
-                </label>
-
-                <label>
-                  <input type="radio" name="after-q1" value="0" />
-                  Not confident
-                </label>
-              </div>
-
-              <div class="awareness-question">
-                <h4>2. Do you know how to identify a phishing message?</h4>
-
-                <label>
-                  <input type="radio" name="after-q2" value="2" />
-                  Yes
-                </label>
-
-                <label>
-                  <input type="radio" name="after-q2" value="1" />
-                  Somewhat
-                </label>
-
-                <label>
-                  <input type="radio" name="after-q2" value="0" />
-                  No
-                </label>
-              </div>
-
-              <div class="awareness-question">
-                <h4>3. Do you use two-factor authentication?</h4>
-
-                <label>
-                  <input type="radio" name="after-q3" value="2" />
-                  Yes / I know how to use it
-                </label>
-
-                <label>
-                  <input type="radio" name="after-q3" value="1" />
-                  On some accounts / I know about it
-                </label>
-
-                <label>
-                  <input type="radio" name="after-q3" value="0" />
-                  No / I do not know about it
-                </label>
-              </div>
-
-              <div class="awareness-question">
-                <h4>
-                  4. Do you know which personal information should not be shared
-                  unnecessarily?
-                </h4>
-
-                <label>
-                  <input type="radio" name="after-q4" value="2" />
-                  Yes, clearly
-                </label>
-
-                <label>
-                  <input type="radio" name="after-q4" value="1" />
-                  Somewhat
-                </label>
-
-                <label>
-                  <input type="radio" name="after-q4" value="0" />
-                  No
-                </label>
-              </div>
-
-              <button
-                type="button"
-                id="save-after-awareness"
-                class="btn btn-primary"
-              >
-                Complete Awareness Activity
-              </button>
-            </div>
-
-            <!-- PARTICIPANT RESULT -->
-
-            <div
-              id="community-participant-result"
-              class="community-result community-hidden"
-            ></div>
 
             <button
               type="button"
-              id="new-community-participant"
-              class="btn btn-secondary community-hidden"
+              id="start-community-activity"
+              class="btn btn-primary"
             >
-              Register Another Participant
+              Register & Start Activity
+            </button>
+
+            <div
+              id="community-registration-message"
+              class="result-box neutral"
+            ></div>
+          </div>
+
+          <!-- BEFORE AWARENESS -->
+
+          <div id="community-before" class="tool-card community-stage">
+            <span class="module-label"> STEP 1 </span>
+
+            <h3>Before Awareness Check</h3>
+
+            <p>Answer these questions before using the awareness modules.</p>
+
+            <div class="question">
+              <h4>
+                1. How confident are you about creating a strong password?
+              </h4>
+
+              <label>
+                <input type="radio" name="beforeQ1" value="2" />
+                Very confident
+              </label>
+
+              <label>
+                <input type="radio" name="beforeQ1" value="1" />
+                Somewhat confident
+              </label>
+
+              <label>
+                <input type="radio" name="beforeQ1" value="0" />
+                Not confident
+              </label>
+            </div>
+
+            <div class="question">
+              <h4>2. Do you know how to identify a phishing message?</h4>
+
+              <label>
+                <input type="radio" name="beforeQ2" value="2" />
+                Yes
+              </label>
+
+              <label>
+                <input type="radio" name="beforeQ2" value="1" />
+                Somewhat
+              </label>
+
+              <label>
+                <input type="radio" name="beforeQ2" value="0" />
+                No
+              </label>
+            </div>
+
+            <div class="question">
+              <h4>
+                3. Do you use two-factor authentication on important accounts?
+              </h4>
+
+              <label>
+                <input type="radio" name="beforeQ3" value="2" />
+                Yes
+              </label>
+
+              <label>
+                <input type="radio" name="beforeQ3" value="1" />
+                On some accounts
+              </label>
+
+              <label>
+                <input type="radio" name="beforeQ3" value="0" />
+                No / I don't know how
+              </label>
+            </div>
+
+            <div class="question">
+              <h4>
+                4. Do you know which personal information should not be shared
+                unnecessarily?
+              </h4>
+
+              <label>
+                <input type="radio" name="beforeQ4" value="2" />
+                Yes
+              </label>
+
+              <label>
+                <input type="radio" name="beforeQ4" value="1" />
+                Somewhat
+              </label>
+
+              <label>
+                <input type="radio" name="beforeQ4" value="0" />
+                No
+              </label>
+            </div>
+
+            <button
+              type="button"
+              id="save-before-awareness"
+              class="btn btn-primary"
+            >
+              Continue to Awareness Activity
             </button>
           </div>
 
-          <!-- DASHBOARD -->
+          <!-- PARTICIPANT ACTIVITY -->
 
-          <div class="community-card community-dashboard-card">
-            <div class="community-card-heading">
-              <div>
-                <span class="module-label"> ACTIVITY SUMMARY </span>
-                <h3>Community Awareness Dashboard</h3>
-              </div>
+          <div id="community-activity" class="tool-card community-stage">
+            <span class="module-label"> STEP 2 </span>
 
-              <span class="community-status-badge"> Local Activity Data </span>
+            <h3>Website Awareness Activity</h3>
+
+            <p>
+              Complete the four interactive digital-security modules with the
+              participant.
+            </p>
+
+            <div class="community-module-list">
+              <a href="#password" class="community-module-item">
+                <strong>🔐 Password Strength Analyzer</strong>
+                <span>Learn about stronger passwords</span>
+              </a>
+
+              <a href="#phishing" class="community-module-item">
+                <strong>🎣 Phishing Message Analyzer</strong>
+                <span>Learn to recognize warning signs</span>
+              </a>
+
+              <a href="#data-risk" class="community-module-item">
+                <strong>🛡️ Personal Data Risk Checker</strong>
+                <span>Learn about information-sharing risks</span>
+              </a>
+
+              <a href="#assessment" class="community-module-item">
+                <strong>📊 Digital Security Assessment</strong>
+                <span>Review everyday security practices</span>
+              </a>
             </div>
 
-            <div class="community-stat-grid">
+            <div id="community-progress" class="result-box neutral">
+              Activity progress: 0 / 4 modules completed.
+            </div>
+          </div>
+
+          <!-- AFTER AWARENESS -->
+
+          <div id="community-after" class="tool-card community-stage">
+            <span class="module-label"> STEP 3 </span>
+
+            <h3>After Awareness Check</h3>
+
+            <p>
+              Answer the same awareness questions after completing the website
+              activity.
+            </p>
+
+            <div class="question">
+              <h4>
+                1. How confident are you about creating a strong password?
+              </h4>
+
+              <label>
+                <input type="radio" name="afterQ1" value="2" />
+                Very confident
+              </label>
+
+              <label>
+                <input type="radio" name="afterQ1" value="1" />
+                Somewhat confident
+              </label>
+
+              <label>
+                <input type="radio" name="afterQ1" value="0" />
+                Not confident
+              </label>
+            </div>
+
+            <div class="question">
+              <h4>2. Do you know how to identify a phishing message?</h4>
+
+              <label>
+                <input type="radio" name="afterQ2" value="2" />
+                Yes
+              </label>
+
+              <label>
+                <input type="radio" name="afterQ2" value="1" />
+                Somewhat
+              </label>
+
+              <label>
+                <input type="radio" name="afterQ2" value="0" />
+                No
+              </label>
+            </div>
+
+            <div class="question">
+              <h4>
+                3. Do you use two-factor authentication on important accounts?
+              </h4>
+
+              <label>
+                <input type="radio" name="afterQ3" value="2" />
+                Yes
+              </label>
+
+              <label>
+                <input type="radio" name="afterQ3" value="1" />
+                On some accounts
+              </label>
+
+              <label>
+                <input type="radio" name="afterQ3" value="0" />
+                No / I don't know how
+              </label>
+            </div>
+
+            <div class="question">
+              <h4>
+                4. Do you know which personal information should not be shared
+                unnecessarily?
+              </h4>
+
+              <label>
+                <input type="radio" name="afterQ4" value="2" />
+                Yes
+              </label>
+
+              <label>
+                <input type="radio" name="afterQ4" value="1" />
+                Somewhat
+              </label>
+
+              <label>
+                <input type="radio" name="afterQ4" value="0" />
+                No
+              </label>
+            </div>
+
+            <button
+              type="button"
+              id="save-after-awareness"
+              class="btn btn-primary"
+            >
+              Complete Participant Activity
+            </button>
+
+            <div
+              id="community-completion-message"
+              class="result-box neutral"
+            ></div>
+          </div>
+
+          <!-- SUMMARY -->
+
+          <div class="tool-card community-summary">
+            <span class="module-label"> PROJECT SUMMARY </span>
+
+            <h3>Community Awareness Summary</h3>
+
+            <div class="community-stats">
               <div class="community-stat">
-                <strong id="dashboard-participants">0</strong>
+                <strong id="registered-count">0</strong>
                 <span>Participants Registered</span>
               </div>
 
               <div class="community-stat">
-                <strong id="dashboard-completed">0</strong>
+                <strong id="completed-count">0</strong>
                 <span>Activities Completed</span>
               </div>
 
               <div class="community-stat">
-                <strong id="dashboard-improved">0</strong>
-                <span>Participants With Improved Score</span>
+                <strong id="improved-count">0</strong>
+                <span>Participants Showing Improvement</span>
               </div>
             </div>
+          </div>
 
-            <h4 class="dashboard-subtitle">Before vs After Awareness</h4>
+          <!-- PARTICIPANT RECORD -->
 
-            <div class="awareness-chart">
-              <div class="chart-row">
-                <div class="chart-label">Strong Passwords</div>
+          <div class="tool-card">
+            <span class="module-label"> RECORD </span>
 
-                <div class="chart-bars">
-                  <div class="bar-group">
-                    <span
-                      id="chart-password-before"
-                      class="chart-bar before-bar"
-                      style="width: 0%"
-                    ></span>
-                    <small>Before</small>
-                  </div>
+            <h3>Participant Activity Record</h3>
 
-                  <div class="bar-group">
-                    <span
-                      id="chart-password-after"
-                      class="chart-bar after-bar"
-                      style="width: 0%"
-                    ></span>
-                    <small>After</small>
-                  </div>
-                </div>
-              </div>
-
-              <div class="chart-row">
-                <div class="chart-label">Phishing Awareness</div>
-
-                <div class="chart-bars">
-                  <div class="bar-group">
-                    <span
-                      id="chart-phishing-before"
-                      class="chart-bar before-bar"
-                      style="width: 0%"
-                    ></span>
-                    <small>Before</small>
-                  </div>
-
-                  <div class="bar-group">
-                    <span
-                      id="chart-phishing-after"
-                      class="chart-bar after-bar"
-                      style="width: 0%"
-                    ></span>
-                    <small>After</small>
-                  </div>
-                </div>
-              </div>
-
-              <div class="chart-row">
-                <div class="chart-label">Two-Factor Authentication</div>
-
-                <div class="chart-bars">
-                  <div class="bar-group">
-                    <span
-                      id="chart-2fa-before"
-                      class="chart-bar before-bar"
-                      style="width: 0%"
-                    ></span>
-                    <small>Before</small>
-                  </div>
-
-                  <div class="bar-group">
-                    <span
-                      id="chart-2fa-after"
-                      class="chart-bar after-bar"
-                      style="width: 0%"
-                    ></span>
-                    <small>After</small>
-                  </div>
-                </div>
-              </div>
-
-              <div class="chart-row">
-                <div class="chart-label">Personal Data Protection</div>
-
-                <div class="chart-bars">
-                  <div class="bar-group">
-                    <span
-                      id="chart-data-before"
-                      class="chart-bar before-bar"
-                      style="width: 0%"
-                    ></span>
-                    <small>Before</small>
-                  </div>
-
-                  <div class="bar-group">
-                    <span
-                      id="chart-data-after"
-                      class="chart-bar after-bar"
-                      style="width: 0%"
-                    ></span>
-                    <small>After</small>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- PARTICIPANT TABLE -->
-
-            <h4 class="dashboard-subtitle">Participant Activity Record</h4>
-
-            <div class="community-table-wrapper">
-              <table class="community-table">
+            <div class="activity-table-wrapper">
+              <table class="activity-table">
                 <thead>
                   <tr>
                     <th>Participant ID</th>
+                    <th>Name</th>
                     <th>Participant Type</th>
-                    <th>Website Activity</th>
-                    <th>Before Score</th>
-                    <th>After Score</th>
+                    <th>Shop / Business</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Activity</th>
+                    <th>Before</th>
+                    <th>After</th>
                     <th>Change</th>
                   </tr>
                 </thead>
 
-                <tbody id="community-participant-table">
-                  <tr>
-                    <td colspan="6" class="empty-table-message">
-                      No completed participants yet.
-                    </td>
-                  </tr>
-                </tbody>
+                <tbody id="community-participant-table"></tbody>
               </table>
             </div>
-
-            <!-- EXPORT -->
 
             <div class="community-dashboard-actions">
               <button
                 type="button"
                 id="export-community-data"
-                class="btn btn-primary"
+                class="btn btn-secondary"
               >
                 Export Activity CSV
               </button>
@@ -1252,14 +1094,13 @@
                 Clear Activity Data
               </button>
             </div>
-
-            <p class="community-storage-note">
-              Activity records are stored locally in this browser. The dashboard
-              displays participant IDs rather than participant names.
-            </p>
           </div>
         </div>
       </section>
+
+      <!-- =================================================
+         QUICK SAFETY RULES
+    ================================================== -->
 
       <!-- =================================================
              QUICK SAFETY RULES
