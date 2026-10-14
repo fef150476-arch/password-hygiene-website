@@ -1,4 +1,7 @@
-/* =========================================================
+  
+  
+  
+  /* =========================================================
    PASSWORD HYGIENE & PERSONAL DATA PROTECTION
    Community Engagement Project (CEP)
    script.js
@@ -1416,3 +1419,125 @@ if (clearCommunityData) {
 clearCommunityRegistrationMessage();
 updateCommunityStageVisibility();
 updateCommunityDashboard();
+/* ---------------------------------------------------------
+   IMPORT CSV
+--------------------------------------------------------- */
+const importCommunityButton = document.getElementById("import-community-data");
+const importCommunityFile = document.getElementById("import-community-file");
+
+function parseCSV(text) {
+  const rows = [];
+  let row = [];
+  let field = "";
+  let inQuotes = false;
+  text = text.replace(/^\uFEFF/, "");
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inQuotes) {
+      if (c === '"') {
+        if (text[i + 1] === '"') {
+          field += '"';
+          i++;
+        } else {
+          inQuotes = false;
+        }
+      } else {
+        field += c;
+      }
+    } else if (c === '"') {
+      inQuotes = true;
+    } else if (c === ",") {
+      row.push(field);
+      field = "";
+    } else if (c === "\n" || c === "\r") {
+      if (c === "\r" && text[i + 1] === "\n") i++;
+      row.push(field);
+      field = "";
+      rows.push(row);
+      row = [];
+    } else {
+      field += c;
+    }
+  }
+  if (field !== "" || row.length) {
+    row.push(field);
+    rows.push(row);
+  }
+  return rows.filter((r) => r.some((v) => v.trim() !== ""));
+}
+
+function importCommunityCSV(text) {
+  const rows = parseCSV(text);
+  if (rows.length < 2) {
+    alert("The file is empty or has no participant rows.");
+    return;
+  }
+  const header = rows[0].map((h) => h.trim());
+  const col = (name) => header.indexOf(name);
+  if (["Participant ID", "Name", "Email"].some((n) => col(n) === -1)) {
+    alert("This does not look like a CSV exported from this website.");
+    return;
+  }
+
+  let added = 0;
+  let skipped = 0;
+
+  rows.slice(1).forEach((r) => {
+    const get = (name) => (r[col(name)] ?? "").trim();
+    const email = get("Email");
+
+    const alreadyExists = communityRecords.some(
+      (rec) => String(rec.email).toLowerCase() === email.toLowerCase()
+    );
+    if (alreadyExists) {
+      skipped++;
+      return;
+    }
+
+    let id = get("Participant ID");
+    if (!id || communityRecords.some((rec) => rec.id === id)) {
+      id = generateParticipantId();
+    }
+
+    const beforeText = get("Before Score");
+    const afterText = get("After Score");
+
+    communityRecords.push({
+      id: id,
+      name: get("Name"),
+      participantType: get("Participant Type"),
+      businessName: get("Business Name"),
+      email: email,
+      phone: get("Phone"),
+      registeredAt: new Date().toISOString(),
+      before: beforeText === "" ? null : { score: Number(beforeText), answers: [] },
+      after: afterText === "" ? null : { score: Number(afterText), answers: [] },
+      tools: {
+        password: get("Password Analyzer") === "Completed",
+        phishing: get("Phishing Analyzer") === "Completed",
+        dataRisk: get("Data Risk Checker") === "Completed",
+        assessment: get("Security Assessment") === "Completed",
+      },
+    });
+    added++;
+  });
+
+  saveCommunityRecords();
+  updateCommunityDashboard();
+  updateCommunityStageVisibility();
+  alert(`Import complete: ${added} added, ${skipped} skipped (already present).`);
+}
+
+if (importCommunityButton && importCommunityFile) {
+  importCommunityButton.addEventListener("click", () => {
+    importCommunityFile.click();
+  });
+  importCommunityFile.addEventListener("change", () => {
+    const file = importCommunityFile.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => importCommunityCSV(String(reader.result));
+    reader.readAsText(file);
+    importCommunityFile.value = "";
+  });
+}
