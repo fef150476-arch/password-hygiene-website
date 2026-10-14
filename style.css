@@ -1,4 +1,6 @@
 
+
+
 /* =========================================================
    PASSWORD HYGIENE & PERSONAL DATA PROTECTION
    COMMUNITY ENGAGEMENT PROJECT
@@ -1113,8 +1115,9 @@ select:focus {
 }
 
 #export-community-data,
-#clear-community-data {
-    background-color: #1769e0 !important;
-    color: white !important;
-    border-color: #1769e0 !important;
+#clear-community-data,
+#import-community-data {
+  background-color: #1769e0 !important;
+  color: white !important;
+  border-color: #1769e0 !important;
 }
